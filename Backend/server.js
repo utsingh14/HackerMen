@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, '../front-end')));
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'mysql',
+    password: 'helloworld',
     database: 'legends_db'
 });
 
