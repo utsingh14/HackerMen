@@ -176,30 +176,23 @@
         });
 
         function fetchLegend(place) {
-            const url = `/legend/${encodeURIComponent(place)}`;
+    const url = `http://localhost:3000/legend/${encodeURIComponent(place)}`;
 
-            console.log('Request URL:', url);
-            fetch(url)
+    console.log('Request URL:', url);
+    fetch(url)
     .then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        return response.text(); // Get response as text
+        return response.json();
     })
-    .then(text => {
-        console.log('Response text:', text);
-        try {
-            const data = JSON.parse(text); // Manually parse the JSON
-            console.log('Parsed legend data:', data);
-            const legendContent = document.getElementById('legendContent');
-            if (data.length > 0) {
-                legendContent.textContent = data[0].fact;
-            } else {
-                legendContent.textContent = 'No legend found.';
-            }
-        } catch (e) {
-            console.error('Error parsing JSON:', e);
-            document.getElementById('legendContent').textContent = 'An error occurred while parsing the legend.';
+    .then(data => {
+        console.log('Fetched legend:', data);
+        const legendContent = document.getElementById('legendContent');
+        if (data.length > 0) {
+            legendContent.textContent = data[0].fact;
+        } else {
+            legendContent.textContent = 'No legend found.';
         }
     })
     .catch(error => {
@@ -207,6 +200,7 @@
         document.getElementById('legendContent').textContent = 'An error occurred while fetching the legend.';
     });
 }
+
 
     </script>
 

@@ -1,9 +1,13 @@
 const express = require('express');
 const path = require('path');
 const mysql = require('mysql2');
+const cors = require('cors'); // Import the cors package
 
 const app = express();
 app.use(express.json());
+
+// Enable CORS for all routes
+app.use(cors());
 
 // Serve static files from the frontend directory
 app.use(express.static(path.join(__dirname, '../front-end')));
@@ -50,6 +54,7 @@ app.get('/places/:city', (req, res) => {
     });
 });
 
+// Route to get the legend by place
 app.get('/legend/:place', (req, res) => {
     const place = req.params.place;
     const query = 'SELECT fact FROM legend WHERE place = ?';
@@ -64,7 +69,6 @@ app.get('/legend/:place', (req, res) => {
         res.json(results);
     });
 });
-
 
 // Start server
 const PORT = process.env.PORT || 3000;
