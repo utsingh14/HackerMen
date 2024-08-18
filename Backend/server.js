@@ -8,6 +8,9 @@ app.use(express.json());
 // Serve static files from the frontend directory
 app.use(express.static(path.join(__dirname, '../front-end')));
 
+// Serve images from 'images' directory
+app.use('/images', express.static(path.join(__dirname, '../images')));
+
 // MySQL connection
 const db = mysql.createConnection({
     host: 'localhost',
@@ -40,21 +43,34 @@ app.get('/cities/:state', (req, res) => {
     });
 });
 
-// Route to get places by city
+// Route to get places by city + images
 app.get('/places/:city', (req, res) => {
     const city = req.params.city;
-    const query = 'SELECT place FROM city WHERE city = ?';
+    const query = `
+        SELECT c.place, l.image_url 
+        FROM city AS c
+        LEFT JOIN legend AS l ON c.place = l.place
+        WHERE c.city = ?
+    `;
     db.query(query, [city], (err, results) => {
         if (err) throw err;
         res.json(results);
     });
 });
 
+<<<<<<< HEAD
 app.get('/legend/:place', (req, res) => {
     const place = req.params.place;
     console.log('Request received for place:', place);
 
     const query = 'SELECT fact FROM legend WHERE place = ?';
+=======
+
+// Route to get legend by place
+app.get('/legend/:place', (req, res) => {
+    const place = req.params.place;
+    const query = 'SELECT fact, image_url FROM legend WHERE place = ?';
+>>>>>>> 10dcf98b5f4b7e3b6ff3afbb1d75fc277236c624
     db.query(query, [place], (err, results) => {
         if (err) {
             console.error('Database error:', err);
