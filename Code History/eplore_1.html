@@ -11,26 +11,40 @@
 
 <body>
     <nav>
-        <!-- Navigation content as before -->
+        <div class="nav__header">
+            <div class="nav__logo">
+                <a href="index.html" class="logo">***Website_Name***</a>
+            </div>
+            <div class="nav__menu__btn" id="menu-btn">
+                <i class="ri-menu-line"></i>
+            </div>
+        </div>
+        <ul class="nav__links" id="nav-links">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="index.html#about">DESTINATIONS</a></li>
+            <li><a href="index.html#tour">TOUR</a></li>
+            <li><a href="index.html#contact">CONTACT</a></li>
+            <li><a href="index.html#contact">CONTACT</a></li>
+        </ul>
     </nav>
     <!-- ----------------------------------------------------------------------------------------------------------- -->
 
     <section id="content">
         <div class="form container row m-auto justify-content-center">
-            <form id="inp" method="post">
+            <form id="inp" method="post" action="process_form.php">
 
                 <div class="inpu">
-                    <label for="state">Choose a state:</label>
+                    <label for="state">choose a state:</label>
                     <select name="state" id="state">
                         <option value="Rajasthan">Rajasthan</option>
                         <option value="Delhi">Delhi</option>
                     </select>
                 </div>
                 <div class="inpu">
-                    <label for="city">Choose a city:</label>
+                    <label for="city">choose a city:</label>
                     <select name="city" id="city">
                         <option value="Jaipur">Jaipur</option>
-                        <option value="Delhi">Delhi</option>
+                        <option value="Jaipur">Jaipur</option>
                     </select>
                 </div>
 
@@ -44,17 +58,57 @@
         <section class="section__container destination__container" id="about">
             <h2 class="section__header">Results</h2>
 
-            <div class="destination__grid" id="destinationGrid">
-                <!-- Destinations will be dynamically inserted here -->
+            <div class="destination__grid">
+                <a href="explore.html">
+                    <div class="destination__card">
+                        <img src="assets/destination-1.jpg" alt="destination" />
+                        <div class="destination__card__details">
+                            <div>
+                                <h4>Hawa Mahal</h4>
+                                <p>Jaipur, Rajasthan</p>
+                            </div>
+                            <div class="destination__rating">
+                                <span><i class="ri-star-fill"></i></span>
+                                4.7
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="explore.html">
+                    <div class="destination__card">
+                        <img src="assets/destination-2.jpg" alt="destination" />
+                        <div class="destination__card__details">
+                            <div>
+                                <h4>Jal Mahal</h4>
+                                <p>Jaipur, Rajasthan</p>
+                            </div>
+                            <div class="destination__rating">
+                                <span><i class="ri-star-fill"></i></span>
+                                4.5
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="explore.html">
+                    <div class="destination__card">
+                        <img src="assets/destination-3.jpg" alt="destination" />
+                        <div class="destination__card__details">
+                            <div>
+                                <h4>Nahargarh Fort</h4>
+                                <p>Jaipur, Rajasthan</p>
+                            </div>
+                            <div class="destination__rating">
+                                <span><i class="ri-star-fill"></i></span>
+                                4.8
+                            </div>
+                        </div>
+                    </div>
+                </a>
             </div>
         </section>
 
-        <!-- Legend section -->
-        <section id="legend" class="section__container">
-            <h2 class="section__header">Legend</h2>
-            <p id="legendContent">Click on a place to see its legend.</p>
-        </section>
     </section>
+
 
     <!-- ----------------------------------------------------------------------------------------------------------- -->
 
@@ -124,94 +178,9 @@
             Copyright © 2024 ***Website_Name***. All rights reserved.
         </div>
     </footer>
-
-    <script>
-        document.getElementById('inp').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the form from submitting normally
-
-            const city = document.getElementById('city').value;
-            const destinationGrid = document.getElementById('destinationGrid');
-
-            // Clear previous results
-            destinationGrid.innerHTML = '';
-
-            if (city === 'Jaipur') {
-                // Add Jaipur destinations dynamically
-                const destinations = [
-                    { name: 'Hawa Mahal', location: 'Jaipur, Rajasthan', rating: 4.7, imgSrc: 'assets/destination-1.jpg' },
-                    { name: 'Jal Mahal', location: 'Jaipur, Rajasthan', rating: 4.5, imgSrc: 'assets/destination-2.jpg' },
-                    { name: 'Nahargarh Fort', location: 'Jaipur, Rajasthan', rating: 4.8, imgSrc: 'assets/destination-3.jpg' }
-                ];
-
-                destinations.forEach(destination => {
-                    const destinationCard = `
-                        <a href="#" class="destination__card" data-place="${destination.name}">
-                            <img src="${destination.imgSrc}" alt="${destination.name}" />
-                            <div class="destination__card__details">
-                                <div>
-                                    <h4>${destination.name}</h4>
-                                    <p>${destination.location}</p>
-                                </div>
-                                <div class="destination__rating">
-                                    <span><i class="ri-star-fill"></i></span>
-                                    ${destination.rating}
-                                </div>
-                            </div>
-                        </a>
-                    `;
-                    destinationGrid.innerHTML += destinationCard;
-                });
-
-                // Add event listener for clicking on a place
-                document.querySelectorAll('.destination__card').forEach(card => {
-                    card.addEventListener('click', function(event) {
-                        event.preventDefault();
-                        const place = this.getAttribute('data-place');
-                        fetchLegend(place);
-                    });
-                });
-            } else {
-                destinationGrid.innerHTML = '<p>No destinations available for the selected city.</p>';
-            }
-        });
-
-        function fetchLegend(place) {
-            const url = `/legend/${encodeURIComponent(place)}`;
-
-            console.log('Request URL:', url);
-            fetch(url)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.text(); // Get response as text
-    })
-    .then(text => {
-        console.log('Response text:', text);
-        try {
-            const data = JSON.parse(text); // Manually parse the JSON
-            console.log('Parsed legend data:', data);
-            const legendContent = document.getElementById('legendContent');
-            if (data.length > 0) {
-                legendContent.textContent = data[0].fact;
-            } else {
-                legendContent.textContent = 'No legend found.';
-            }
-        } catch (e) {
-            console.error('Error parsing JSON:', e);
-            document.getElementById('legendContent').textContent = 'An error occurred while parsing the legend.';
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching legend:', error);
-        document.getElementById('legendContent').textContent = 'An error occurred while fetching the legend.';
-    });
-}
-
-    </script>
-
     <script src="https://unpkg.com/scrollreveal"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- <script src="explore.js"></script> -->
     <script src="main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
@@ -219,7 +188,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
-        <script src="server.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>

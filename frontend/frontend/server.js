@@ -52,27 +52,18 @@ app.get('/places/:city', (req, res) => {
 
 app.get('/legend/:place', (req, res) => {
     const place = req.params.place;
-    console.log('Request received for place:', place);
-
     const query = 'SELECT fact FROM legend WHERE place = ?';
     db.query(query, [place], (err, results) => {
         if (err) {
-            console.error('Database error:', err);
-            res.status(500).json({ error: 'Server error' });
-            return;
+            console.error('Database query error:', err);
+            return res.status(500).json({ error: 'Database query error' });
         }
-
-        if (results.length === 0) {
-            console.log(`No legend found for place: ${place}`);
-            res.status(404).json({ message: 'No legend found' });
-            return;
-        }
-
-        console.log(`Legend found for place ${place}:`, results);
+        // Log the results
+        console.log('Database query results:', results);
+        // Return the results as JSON
         res.json(results);
     });
 });
-
 
 
 // Start server
